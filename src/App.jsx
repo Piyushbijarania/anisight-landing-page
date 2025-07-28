@@ -7,36 +7,16 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 const App = () => {
-  const [showContent, setShowContent] = useState(false);
-  useGSAP(() => {
-    const tl = gsap.timeline();
-    tl.to(".vi-mask-group", {
-      rotate: 40,
-      transformOrigin: "50% 50%",
-      scale: 2,
-      duration: 1.5,
-      ease: "expo.inOut",
-    })
-    .to(".vi-mask-group", {
-      // rotate: 100,
-      transformOrigin: "50% 50%",
-      scale: 10,
-      duration: 2,
-      delay: -1.5,
-      ease: "power4.inOut",
-      opacity: 0,
-      onUpdate: function() {
-        if(this.progress() >= 0.9){
-          document.querySelector(".svg").remove();
-          setShowContent(true);
-          this.kill();
-        }
-      }
-    })
-  });
+  const [showContent, setShowContent] = useState(true);
 
   useGSAP(() => {
     if (!showContent) return;
+
+    // Set up smooth scrolling
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+    });
 
     gsap.to(".main", {
       scale: 1,
@@ -46,26 +26,11 @@ const App = () => {
       ease: "Expo.easeInOut",
     });
 
-    gsap.to(".bg1", {
-      scale: 1.1,
-      rotate: 0,
-      duration: 2,
-      delay: "-.8",
-      ease: "Expo.easeInOut",
-    });
-
-    gsap.to(".bg2", {
-      scale: 1.1,
-      rotate: 0,
-      duration: 2,
-      delay: "-.8",
-      ease: "Expo.easeInOut",
-    });
+    
 
     gsap.to(".logo", {
-      scale: 1.4,
-      x: "-50%",
-      bottom: "-25%",
+      scale: 0.8,
+      
       rotate: 0,
       duration: 2,
       delay: "-.8",
@@ -84,95 +49,56 @@ const App = () => {
 
     main?.addEventListener("mousemove", function (e) {
       const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
-      gsap.to(".main .text", {
+      gsap.to(".text", {
         x: `${xMove * 0.4}%`,
+        duration: 0.3,
+        ease: "power2.out"
       });
-      gsap.to(".bg1", {
-        x: xMove,
-      });
-      gsap.to(".bg2", {
-        x: xMove * 1.7,
-      });
+
     });
 
-    // Logo scroll effect
-    gsap.to(".logo", {
-      y: "-60vh", // Move up by 60% of viewport height
-      scale: 1.5, // Optionally shrink a bit
+    // Combined scroll timeline for smoother performance
+    let scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: ".main",
         start: "top top",
         end: "bottom top",
-        scrub: true, // Smoothly follows scroll
+        scrub: 1, // Slightly smoother scrub
+        invalidateOnRefresh: true
       }
     });
-    gsap.to(".text", {
-      y: "-60vh", // Move up by 60% of viewport height
-      scale: 1.5, // Optionally shrink a bit
-      scrollTrigger: {
-        trigger: ".main",
-        start: "top top",
-        end: "bottom top",
-        scrub: true, // Smoothly follows scroll
-      }
-    });
+
+    scrollTl
+      .to(".text", {
+        y: "-60vh",
+        scale: 1.5,
+      }, 0)
+      .to(".secondPage", {
+        y: "-100vh",
+      }, 0);
   }, [showContent]);
   return (
     <>
-      <div className="svg flex items-center justify-center fixed top-0 left-0 z-[100] w-full h-screen overflow-hidden bg-[#000]">
-      <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <mask id="viMask">
-            <rect width="100%" height="100%" fill="black" />
-            <g className="vi-mask-group">
-              <text
-                x="50%"
-                y="50%"
-                fontSize="250"
-                textAnchor="middle"
-                fill="white"
-                dominantBaseline="middle"
-                fontFamily="Arial Black"
-                >
-                PEKI
-              </text>
-            </g>
-          </mask>
-        </defs>
-        <image
-          href="./bg.png"
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid slice"
-          mask="url(#viMask)"
-        />
-      </svg>
-      </div>
               {showContent && (
-          <div className="main w-full h-screen bg-black">
+          <div className="main w-full h-screen bg-black" style={{scrollBehavior: 'smooth'}}>
             <div className='navbar absolute top-0 left-0 w-full z-20 py-2 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm'>
+                <div className="hover:cursor-pointer">
+                  <i className="ri-menu-2-line text-white text-2xl"></i>  
+                </div>
                 <div className='flex items-center gap-4'>
-                  <div className='flex flex-col gap-1'>
-                    <div className='w-10 h-1 bg-white rounded'></div>
-                    <div className='w-7 h-1 bg-white rounded'></div>
-                    <div className='w-4 h-1 bg-white rounded'></div>
-                  </div>
                   <span className='text-white text-lg font-bold tracking-wide'>PEKI</span>
                 </div>
             </div>
             <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center">
                 {/* Backgrounds */}
-                <img className="absolute top-0 left-0 w-full h-full object-cover bg1 z-0" src="./bg1.png" alt="" />
-                <img className="absolute top-0 left-0 w-full h-full object-cover bg2 z-0" src="./bg2.png" alt="" />
 
                 {/* Centered Text */}
-                <div className="absolute top-1/4 left-1/2 w-full transform -translate-x-1/2 z-10 text-8xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text">
-                  <h1>AniSight</h1>
-                  <h1>Ai</h1>
+                <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 z-10 text-6xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text whitespace-nowrap">
+                  <h1>AniSight Ai</h1>
                 </div>
 
                 {/* Centered Logo */}
-                <img className="absolute left-1/2 bottom-20 transform -translate-x-1/2  logo" src="./logo.png" alt="" />
+                <img className="absolute pt-30  transform -translate-x-1/2  logo" src="./logo.png" alt="" />
             </div>
             <div className='btmbar absolute bottom-0 left-0 w-full py-5 px-10 bg-gradient-to-t from-black to-transparent'>
               <div className="flex items-center gap-4">
@@ -180,8 +106,11 @@ const App = () => {
               <h3 className='font-sans-serif font-bold text-white '>Scroll down</h3>
               </div>
             </div>
-            <div className="secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 relative overflow-hidden">
-              {/* Left: Logo and Socials */}
+
+
+            {/* Second page */}
+            <div className="secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 absolute top-full left-0 z-30 overflow-hidden">
+              {/* Left side wala: Logo and Socials */}
               <div className="flex flex-col items-start">
                 <img className="w-150 h-100 " src="./logo.png" alt="" />
                 <div className="flex gap-6 ml-62 ">
@@ -194,7 +123,7 @@ const App = () => {
                 </div>
               </div>
 
-              {/* Right: Instagram Description */}
+              {/* Right wala: Instagram Description */}
               <div className="flex flex-col items-end w-1/2 pr-0">
                 <h2 className="text-3xl font-bold text-amber-400 mb-2">AniSight AI on Instagram</h2>
                 <p className="text-white text-lg mb-4 max-w-md text-right">
