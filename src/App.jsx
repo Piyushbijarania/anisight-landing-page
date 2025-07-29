@@ -3,7 +3,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Spotlight } from "@/components/ui/spotlight";
 gsap.registerPlugin(ScrollTrigger);
+
 
 
 const App = () => {
@@ -81,6 +83,7 @@ const App = () => {
     <>
               {showContent && (
           <div className="main w-full h-screen bg-black" style={{scrollBehavior: 'smooth'}}>
+            
             <div className='navbar absolute top-0 left-0 w-full z-20 py-2 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm'>
                 <div className="hover:cursor-pointer">
                   <i className="ri-menu-2-line text-white text-2xl"></i>  
@@ -90,6 +93,20 @@ const App = () => {
                 </div>
             </div>
             <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center">
+                {/* Spotlight Effects */}
+                <Spotlight
+                  className="-top-40 left-0 md:left-60 md:-top-20"
+                  fill="white"
+                />
+                <Spotlight
+                  className="top-10 left-full -translate-x-full"
+                  fill="purple"
+                />
+                <Spotlight
+                  className="top-28 left-80 h-[80vh] w-[50vw]"
+                  fill="blue"
+                />
+                
                 {/* Backgrounds */}
 
                 {/* Centered Text */}
