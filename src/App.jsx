@@ -4,12 +4,14 @@ import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Spotlight } from "@/components/ui/spotlight";
+import { Sidebar } from './components/sidebar';
 gsap.registerPlugin(ScrollTrigger);
 
 
 
 const App = () => {
   const [showContent, setShowContent] = useState(true);
+  const [SidebarOpen, SetSidebarOpen] = useState(false);
 
   useGSAP(() => {
     if (!showContent) return;
@@ -19,6 +21,7 @@ const App = () => {
     ScrollTrigger.config({
       autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
     });
+
 
     gsap.to(".main", {
       scale: 1,
@@ -82,16 +85,19 @@ const App = () => {
   return (
     <>
               {showContent && (
-          <div className="main w-full h-screen bg-black" style={{scrollBehavior: 'smooth'}}>
+          <div className="main bg-black" style={{scrollBehavior: 'smooth'}}>
             
-            <div className='navbar absolute top-0 left-0 w-full z-20 py-2 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm'>
+            <div className='navbar absolute top-0 left-0 w-full z-20 py-4 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm' id="home">
                 <div className="hover:cursor-pointer">
-                  <i className="ri-menu-2-line text-white text-2xl"></i>  
+                  <i className="ri-menu-2-line text-white text-2xl hover:text-amber-400 transition-colors duration-300" onClick={() => SetSidebarOpen(!SidebarOpen)}></i> 
                 </div>
                 <div className='flex items-center gap-4'>
                   <span className='text-white text-lg font-bold tracking-wide'>PEKI</span>
                 </div>
             </div>
+            
+            {SidebarOpen && <Sidebar />}
+            
             <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center">
                 {/* Spotlight Effects */}
                 <Spotlight
@@ -117,7 +123,7 @@ const App = () => {
                 {/* Centered Logo */}
                 <img className="absolute pt-30  transform -translate-x-1/2  logo" src="./logo.png" alt="" />
             </div>
-            <div className='btmbar absolute bottom-0 left-0 w-full py-5 px-10 bg-gradient-to-t from-black to-transparent'>
+            <div className='btmbar absolute bottom-0 left-0 w-full py-10 px-10 bg-gradient-to-t from-black to-transparent'>
               <div className="flex items-center gap-4">
               <i className=" ml-2 text-white text-2xl ri-scroll-to-bottom-line"></i>
               <h3 className='font-sans-serif font-bold text-white '>Scroll down</h3>
@@ -126,7 +132,7 @@ const App = () => {
 
 
             {/* Second page */}
-            <div className="secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 absolute top-full left-0 z-30 overflow-hidden">
+            <div className="  secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 absolute top-full left-0 z-30 overflow-hidden " id='about'>
               {/* Left side wala: Logo and Socials */}
               <div className="flex flex-col items-start">
                 <img className="w-150 h-100 " src="./logo.png" alt="" />
