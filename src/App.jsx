@@ -85,20 +85,22 @@ const App = () => {
   return (
     <>
               {showContent && (
-          <div className="main bg-black" style={{scrollBehavior: 'smooth'}}>
+          <div className=" bg-black" style={{scrollBehavior: 'smooth'}}>
             
-            <div className='navbar absolute top-0 left-0 w-full z-20 py-4 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm' id="home">
+            <div className='navbar fixed top-0 left-0 w-full z-40 py-4 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm' >
                 <div className="hover:cursor-pointer">
-                  <i className="ri-menu-2-line text-white text-2xl hover:text-amber-400 transition-colors duration-300" onClick={() => SetSidebarOpen(!SidebarOpen)}></i> 
+                  <i className="ri-menu-2-line text-white text-2xl hover:text-amber-400  transition-colors duration-300" onClick={() => SetSidebarOpen(!SidebarOpen)}></i> 
                 </div>
                 <div className='flex items-center gap-4'>
-                  <span className='text-white text-lg font-bold tracking-wide'>PEKI</span>
+                  <a href="https://x.com/Piyushj8i" target="_blank" rel="noopener noreferrer">
+                  <span className='text-white text-lg font-bold tracking-wide hover:text-amber-400 cursor-pointer transition-colors duration-300'>PEKI</span>
+                  </a>
                 </div>
             </div>
             
             {SidebarOpen && <Sidebar />}
             
-            <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center">
+            <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center" id="home">
                 {/* Spotlight Effects */}
                 <Spotlight
                   className="-top-40 left-0 md:left-60 md:-top-20"
@@ -116,7 +118,7 @@ const App = () => {
                 {/* Backgrounds */}
 
                 {/* Centered Text */}
-                <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 z-10 text-6xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text whitespace-nowrap">
+                <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 z-10 text-6xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text whitespace-nowrap" >
                   <h1>AniSight Ai</h1>
                 </div>
 
