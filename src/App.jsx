@@ -5,6 +5,7 @@ import "remixicon/fonts/remixicon.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Spotlight } from "@/components/ui/spotlight";
 import { Sidebar } from './components/sidebar';
+import TiltedCard from './components/TiltedCard';
 gsap.registerPlugin(ScrollTrigger);
 
 
@@ -16,26 +17,13 @@ const App = () => {
   useGSAP(() => {
     if (!showContent) return;
 
-    // Set up smooth scrolling
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({
       autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
     });
 
-
-    gsap.to(".main", {
-      scale: 1,
-      rotate: 0,
-      duration: 2,
-      delay: "-1",
-      ease: "Expo.easeInOut",
-    });
-
-    
-
     gsap.to(".logo", {
       scale: 0.8,
-      
       rotate: 0,
       duration: 2,
       delay: "-.8",
@@ -52,14 +40,27 @@ const App = () => {
 
     const main = document.querySelector(".main");
 
+    // Enhanced mouse follow effect for both text and logo
     main?.addEventListener("mousemove", function (e) {
       const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
+      const yMove = (e.clientY / window.innerHeight - 0.5) * 40;
+      
+      // Text follows mouse (existing)
       gsap.to(".text", {
         x: `${xMove * 0.4}%`,
+        y: `${yMove * 0.2}%`,
         duration: 0.3,
         ease: "power2.out"
       });
 
+      // Logo card follows mouse (NEW)
+      gsap.to(".logo", {
+        x: `${xMove * 0.6}%`,
+        y: `${yMove * 0.4}%`,
+        rotation: xMove * 0.5,
+        duration: 0.4,
+        ease: "power2.out"
+      });
     });
 
     // Combined scroll timeline for smoother performance
@@ -68,7 +69,7 @@ const App = () => {
         trigger: ".main",
         start: "top top",
         end: "bottom top",
-        scrub: 1, // Slightly smoother scrub
+        scrub: 1,
         invalidateOnRefresh: true
       }
     });
@@ -85,9 +86,9 @@ const App = () => {
   return (
     <>
               {showContent && (
-          <div className=" bg-black" style={{scrollBehavior: 'smooth'}}>
+          <div className="  bg-black" style={{scrollBehavior: 'smooth'}}>
             
-            <div className='navbar fixed top-0 left-0 w-full z-40 py-4 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm' >
+            <div className='navbar fixed top-0 left-0 w-full z-50 py-4 px-8 flex items-center justify-between bg-black/10 backdrop-blur-sm' >
                 <div className="hover:cursor-pointer">
                   <i className="ri-menu-2-line text-white text-2xl hover:text-amber-400  transition-colors duration-300" onClick={() => SetSidebarOpen(!SidebarOpen)}></i> 
                 </div>
@@ -97,17 +98,17 @@ const App = () => {
                   </a>
                 </div>
             </div>
+                {SidebarOpen && <Sidebar />}  
             
-            {SidebarOpen && <Sidebar />}
             
-            <div className="imagesdiv relative overflow-hidden w-full h-screen flex items-center justify-center" id="home">
+            <div className="imagesdiv relative overflow-hidden w-500px h-screen flex items-center justify-center" id="home">
                 {/* Spotlight Effects */}
                 <Spotlight
                   className="-top-40 left-0 md:left-60 md:-top-20"
                   fill="white"
                 />
                 <Spotlight
-                  className="top-10 left-full -translate-x-full"
+                  className="top-10 left-500px -translate-x-500px"
                   fill="purple"
                 />
                 <Spotlight
@@ -118,14 +119,33 @@ const App = () => {
                 {/* Backgrounds */}
 
                 {/* Centered Text */}
-                <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 z-10 text-6xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text whitespace-nowrap" >
+                <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 z-10 text-6xl font-extrabold text-amber-400 drop-shadow-[0_2px_8px_rgba(255,200,0,0.7)] text-center pointer-events-none text whitespace-nowrap" >
                   <h1>AniSight Ai</h1>
-                </div>
+                </div >
 
                 {/* Centered Logo */}
-                <img className="absolute pt-30  transform -translate-x-1/2  logo" src="./logo.png" alt="" />
+                  <TiltedCard
+                    className="absolute z-60 pt-500 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    imageSrc="logo.png"
+                    altText=""
+                    captionText="cool right"
+                    containerHeight="700px"
+                    containerWidth="900px"
+                    imageHeight="300px"
+                    imageWidth="300px"
+                    rotateAmplitude={20}
+                    scaleOnHover={1.2}
+                    showMobileWarning={false}
+                    showTooltip={true}
+                    displayOverlayContent={true}
+                    overlayContent={
+                      <p className="w-full h-full tilted-card-demo-text">
+                        
+                      </p>
+                    }
+                  />
             </div>
-            <div className='btmbar absolute bottom-0 left-0 w-full py-10 px-10 bg-gradient-to-t from-black to-transparent'>
+            <div className='btmbar absolute bottom-0 left-0 w-500px py-10 px-10 bg-gradient-to-t from-black to-transparent'>
               <div className="flex items-center gap-4">
               <i className=" ml-2 text-white text-2xl ri-scroll-to-bottom-line"></i>
               <h3 className='font-sans-serif font-bold text-white '>Scroll down</h3>
@@ -134,11 +154,31 @@ const App = () => {
 
 
             {/* Second page */}
-            <div className="  secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 absolute top-full left-0 z-30 overflow-hidden " id='about'>
+            <div className="  secondPage w-full h-screen bg-black flex flex-row items-center justify-between pl-16 pr-50 absolute top-500px left-0 z-30 overflow-hidden " id='about'>
               {/* Left side wala: Logo and Socials */}
-              <div className="flex flex-col items-start">
-                <img className="w-150 h-100 " src="./logo.png" alt="" />
-                <div className="flex gap-6 ml-62 ">
+              <div className="flex flex-col items-start pl-20">
+                <TiltedCard
+                  
+                  imageSrc="logo.png"
+                  altText="AniSight AI Logo"
+                  captionText="AniSight AI "
+                  containerHeight="300px"
+                  containerWidth="300px"
+                  imageHeight="300px"
+                  imageWidth="300px"
+                  rotateAmplitude={20}
+                  scaleOnHover={1.2}
+                  showMobileWarning={false}
+                  showTooltip={true}
+                  displayOverlayContent={true}
+                  overlayContent={
+                    <p className="w-150  tilted-card-demo-text">
+                      AniSight AI
+                    </p>
+                  }
+                />
+                
+                <div className="flex gap-6 ml-24 ">
                   <a href="https://x.com/Piyushj8i" target="_blank" rel="noopener noreferrer">
                     <i className="ri-twitter-x-line text-white text-4xl hover:text-amber-400 transition"></i>
                   </a>

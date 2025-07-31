@@ -1,6 +1,6 @@
 export function Sidebar () {
     return (
-        <div className="fixed top-0 left-0 h-screen w-64 bg-black/10 backdrop-blur-sm text-white z-50 p-6 ">
+        <div className="fixed top-0 mt-16 left-0 h-screen w-64 bg-black/10 backdrop-blur-sm text-white z-50 p-6 ">
             <div className="mb-8">
                 <h2 className="text-2xl font-bold text-amber-400">AniSight AI</h2>
                 <p className="text-gray-300 text-sm mt-2">Navigation Menu</p>
